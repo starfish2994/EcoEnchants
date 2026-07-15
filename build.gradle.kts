@@ -1,4 +1,4 @@
-﻿import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     kotlin("jvm") version "2.3.0"
@@ -26,6 +26,9 @@ dependencies {
     implementation(project(":eco-core:core-nms:v26_1_1", configuration = "shadow"))
     implementation(project(":eco-core:core-nms:v26_1_2", configuration = "shadow"))
     implementation(project(":eco-core:core-nms:v26_2", configuration = "shadow"))
+    implementation("com.willfp:libreforge:$libreforgeVersion") {
+        isTransitive = false
+    }
 }
 
 java {
@@ -101,6 +104,8 @@ allprojects {
     }
 
     dependencies {
+        // ⭐ 将所有子项目的公共依赖移到这里
+        // 注意：ECO 保持 compileOnly，因为它通常由服务器提供
         compileOnly("com.willfp:eco:$ecoVersion")
         compileOnly("org.jetbrains:annotations:26.0.2")
         compileOnly("org.jetbrains.kotlin:kotlin-stdlib:2.3.0")
@@ -110,7 +115,7 @@ allprojects {
     tasks {
         shadowJar {
             exclude("META-INF/**")
-            relocate("com.willfp.libreforge.loader", "com.willfp.ecoenchants.libreforge.loader")
+            relocate("com.willfp.libreforge", "com.willfp.ecoitems.libs.libreforge")
             relocate("kotlin", "com.willfp.eco.libs.kotlin")
             relocate("kotlin.jvm", "com.willfp.eco.libs.kotlin.jvm")
             relocate("kotlin.coroutines", "com.willfp.eco.libs.kotlin.coroutines")
