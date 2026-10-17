@@ -52,6 +52,31 @@ The "band" for each level is calculated by dividing 1 by the amount of levels. T
 
 Increasing the bias towards 1 will lead to an increased likeliness of low-level enchantments, and lowering the bias towards -1 will lead to an increased likeliness of high-level enchantments.
 
+Loot works differently. Instead of a number between 0 and 1, loot starts from a high number between 0.7 and 1, biases it, and then picks the level randomly around the result. This means the bias lowers loot levels but never rules them out: even with a bias of 1, a 5-level enchantment found in loot is only level 1 about a third of the time.
+
+To cap loot levels for a type, set `max-loot-level` on the type in `types.yml`. Loot levels for that type then fall between 1 and the cap, with the same spread as an enchantment that only has that many levels. For example, `max-loot-level: 1` means enchantments of that type are only ever level 1 from loot. Leave it at `-1` for no cap.
+
+```yaml
+  - id: special
+    format: "<gradient:#FB57EC:#EF1DEC>"
+    limit: 1
+    high-level-bias: 0.7
+    max-loot-level: 2 # Special enchants from loot are level 1 or 2.
+    no-grindstone: false
+```
+
+## Book Items
+
+Enchanted books can look different per enchantment type or rarity. Add `book-item` to a type in `types.yml` or a rarity in `rarity.yml`, set to an [item lookup](https://hub.auxilor.io/wiki/eco/the-item-lookup-system-the-item-lookup-system). Books then show that item's model, custom model data, glint and tooltip style.
+
+```yaml
+  - id: legendary
+    display-name: "Legendary"
+    book-item: "enchanted_book item_model:myserver:legendary_book" # Legendary books use a custom model.
+```
+
+The book is chosen by the first enchantment in display order. If its type and its rarity both set `book-item`, `display.book-item.priority` in `config.yml` decides which is used: `type` (the default) or `rarity`. The change is visual only: the item is still a normal enchanted book, so anvils and combining work as usual. Books that already have their own model, custom model data, glint or tooltip style are not changed.
+
 <hr/>
 
 ## Where to go next
